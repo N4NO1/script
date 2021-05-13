@@ -17,7 +17,7 @@ function handleRow(accessToken, environment) {
                 },
                 json: true,
                 body: {
-                    data: [{ //data for UOM - no append
+                    data: [{ //data for UOM - no appending
                         itemId: itemId,
                         supplierId: supplierId,
                         cost: cost,
