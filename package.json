@@ -9,7 +9,7 @@
   "author": "Jacob Allen <j.allen@stok.ly>",
   "license": "ISC",
   "dependencies": {
-    "csv-parser": "^2.1.0",
+    "csv-parser": "^2.3.5",
     "request": "^2.88.0"
   }
 }
