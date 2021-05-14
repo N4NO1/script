@@ -7,7 +7,7 @@ function handleRow(accessToken, environment) {
         return new Promise((resolve, reject) => {
             const { itemId,supplierId,cost } = data // is this how to grab data from CSV??
 
-            const simpleUrl = "https://api." + (environment === "prod" ? "" : "dev." ) + "stok.ly/v0/items/" + itemId + "/units-of-measure" //UOM endpoint
+            const simpleUrl = "https://api." + (environment === "prod" ? "" : "dev." ) + "stok.ly/v0/items/" + itemId
 
             const options = {
                 url: simpleUrl,
@@ -17,7 +17,7 @@ function handleRow(accessToken, environment) {
                 },
                 json: true,
                 body: {
-                    data: [{ //data for UOM - no appending
+                    unitsOfMeasure: [{ //data for UOM - no appending
                         itemId: itemId,
                         supplierId: supplierId,
                         cost: cost,
