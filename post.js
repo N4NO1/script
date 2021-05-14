@@ -5,7 +5,7 @@ module.exports = handleRow
 function handleRow(accessToken, environment) {
     return function postData(data) {
         return new Promise((resolve, reject) => {
-            const { itemId,supplierId,cost } = data // is this how to grab data from CSV??
+            const { itemId,supplierId,cost,supplierSku } = data // is this how to grab data from CSV??
 
             const simpleUrl = "https://api." + (environment === "prod" ? "" : "dev." ) + "stok.ly/v0/items/" + itemId
 
@@ -17,12 +17,16 @@ function handleRow(accessToken, environment) {
                 },
                 json: true,
                 body: {
+                    appednUnitsOfMeasure: true,
                     unitsOfMeasure: [{ //data for UOM - no appending
                         itemId: itemId,
                         supplierId: supplierId,
-                        cost: cost,
-                        currency: "GBP",
-                        quantityInUnit: 1
+                        supplierSku: supplierSku,
+                        cost: {
+                            amount: cost,
+                            currency: "GBP"
+                            },
+                        quantityInUnit: 2
                     }]
                 }
             }
