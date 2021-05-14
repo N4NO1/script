@@ -17,7 +17,7 @@ function handleRow(accessToken, environment) {
                 },
                 json: true,
                 body: {
-                    appednUnitsOfMeasure: true,
+                    appendUnitsOfMeasure: true,
                     unitsOfMeasure: [{ //data for UOM - no appending
                         itemId: itemId,
                         supplierId: supplierId,
@@ -26,11 +26,14 @@ function handleRow(accessToken, environment) {
                             amount: cost,
                             currency: "GBP"
                             },
-                        quantityInUnit: 2
+                        quantityInUnit: 1
                     }]
                 }
+            
             }
+            console.log(options.body)
             request(options, function handlePostResponse(error, response, body) {
+                
                 console.log("PATCH", options.url, "--", response.statusCode, "--", response.statusCode === 202 ? "SUCCESS" : "ERROR -- " + body.message)           
                 return resolve()
             })
