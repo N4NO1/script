@@ -1,4 +1,4 @@
-﻿itemId                               ,supplierId                                                                       ,Cost    ,Quantity
+﻿itemId                               ,supplierId                                                                       ,cost    ,Quantity
 00009ecb-fc5e-445e-839f-f989e6477e90 ,beeb51ed-3932-4d9e-8efa-d73ca372ee52                                             ,23.6    ,1
 0016907e-e9d6-4287-80a2-42f5c91ee177 ,575b5b90-bc37-4071-87d6-123fc2b58737                                             ,106     ,1
 001b2f86-3618-4b50-8cc5-c2047bd2d687 ,a7138524-d361-45e8-99d8-af481a527b1a                                             ,43.77   ,1
