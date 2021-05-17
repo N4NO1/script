@@ -1,4 +1,4 @@
-﻿itemId,supplierId,Cost Price,Supplier SKU
+﻿itemId,supplierId,costPrice,supplierSku
 afa1df00-1141-4cfe-ac84-7498a7fdc183,3845f993-ee87-46f8-b83c-2e0b1fa9c1c8,1.5,003-12
 3c1558aa-cce5-443e-b737-19c60a6c3bbe,3845f993-ee87-46f8-b83c-2e0b1fa9c1c8,2,003-16
 07849774-241e-4942-afb8-2f4d8320ea77,3845f993-ee87-46f8-b83c-2e0b1fa9c1c8,43.33,12-357-G
