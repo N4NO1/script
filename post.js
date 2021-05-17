@@ -1,7 +1,7 @@
 const request = require("request")
 var dateString = String()
 module.exports = handleRow
-
+let counter = 0
 function handleRow(accessToken, environment) {
     return function postData(data) {
         return new Promise((resolve, reject) => {
@@ -34,7 +34,8 @@ function handleRow(accessToken, environment) {
             //console.log(options.body)
             request(options, function handlePostResponse(error, response, body) {
                 var date = new Date()
-                console.log(date.toISOString(),"PATCH", options.url, "--", response.statusCode, "--", response.statusCode === 202 ? "SUCCESS" : "ERROR -- " + body.message)           
+                console.log(counter+1,date.toISOString(),"PATCH", options.url, "--", response.statusCode, "--", response.statusCode === 202 ? "SUCCESS" : "ERROR -- " + body.message)   
+                counter++        
                 return resolve()
             })
         })
