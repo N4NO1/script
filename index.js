@@ -8,7 +8,7 @@ const environment = process.argv[4] || "dev"
 
 if (!(source && accessToken)) {
     console.log("missing arguments")
-    console.log("node attributeRemover sourceFile accessToken [environment (default=dev)]")
+    console.log("node index.js sourceFile accessToken [environment (default=dev)]")
     process.exit(1)
 }
 const processData = handleRow(accessToken, environment)
