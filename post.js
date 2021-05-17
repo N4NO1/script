@@ -6,9 +6,7 @@ function handleRow(accessToken, environment) {
     return function postData(data) {
         return new Promise((resolve, reject) => {
             const { itemId,supplierId,cost,supplierSku } = data // is this how to grab data from CSV??
-
             const simpleUrl = "https://api." + (environment === "prod" ? "" : "dev." ) + "stok.ly/v0/items/" + itemId
-
             const options = {
                 url: simpleUrl,
                 method: "PATCH",
@@ -29,12 +27,11 @@ function handleRow(accessToken, environment) {
                         quantityInUnit: 1
                     }]
                 }
-            
             }
             //console.log(options.body)
             request(options, function handlePostResponse(error, response, body) {
                 var date = new Date()
-                console.log(counter+1,date.toISOString(),"PATCH", options.url, "--", response.statusCode, "--", response.statusCode === 202 ? "SUCCESS" : "ERROR -- " + body.message)   
+                console.log(counter+1,date.toISOString(),"PATCH", options.url, "--", response.statusCode, response.statusCode === 202 ? "SUCCESS" : "ERROR -- " + body.message)   
                 counter++        
                 return resolve()
             })

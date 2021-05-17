@@ -11,9 +11,7 @@ if (!(source && accessToken)) {
     console.log("node attributeRemover sourceFile accessToken [environment (default=dev)]")
     process.exit(1)
 }
-
 const processData = handleRow(accessToken, environment)
-
 const stream = fs.createReadStream(source)
 .pipe(csv({
     mapHeaders: ({ header, index }) => header.trim()
