@@ -31,7 +31,7 @@ function handleRow(accessToken, environment) {
                 }
             
             }
-            console.log(options.body)
+            //console.log(options.body)
             request(options, function handlePostResponse(error, response, body) {
                 
                 console.log("PATCH", options.url, "--", response.statusCode, "--", response.statusCode === 202 ? "SUCCESS" : "ERROR -- " + body.message)           
