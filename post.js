@@ -1,5 +1,6 @@
 const request = require("request")
-
+var date = new Date()
+var dateString = String()
 module.exports = handleRow
 
 function handleRow(accessToken, environment) {
@@ -33,8 +34,8 @@ function handleRow(accessToken, environment) {
             }
             //console.log(options.body)
             request(options, function handlePostResponse(error, response, body) {
-                
-                console.log("PATCH", options.url, "--", response.statusCode, "--", response.statusCode === 202 ? "SUCCESS" : "ERROR -- " + body.message)           
+                dateString = date.getHours()+":"+date.getMinutes()+":"+date.getSeconds()+":"+date.getMilliseconds()
+                console.log(dateString," || PATCH", options.url, "--", response.statusCode, "--", response.statusCode === 202 ? "SUCCESS" : "ERROR -- " + body.message)           
                 return resolve()
             })
         })
