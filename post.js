@@ -5,8 +5,8 @@ let counter = 0
 function handleRow(accessToken, environment) {
     return function postData(data) {
         return new Promise((resolve, reject) => {
-            const { itemId,supplierId,cost,supplierSku } = data // is this how to grab data from CSV??
-            const simpleUrl = "https://api." + (environment === "prod" ? "" : "dev." ) + "stok.ly/v0/items/" + itemId
+            const { itemId,variantIds} = data // is this how to grab data from CSV??
+            const simpleUrl = "https://api." + (environment === "prod" ? "" : "dev." ) + "stok.ly/v0/variable-items/" + itemId
             const options = {
                 url: simpleUrl,
                 method: "PATCH",
@@ -15,17 +15,7 @@ function handleRow(accessToken, environment) {
                 },
                 json: true,
                 body: {
-                    appendUnitsOfMeasure: true,
-                    unitsOfMeasure: [{ //data for UOM - no appending
-                        itemId: itemId,
-                        supplierId: supplierId,
-                        supplierSku: supplierSku,
-                        cost: {
-                            amount: cost,
-                            currency: "GBP"
-                            },
-                        quantityInUnit: 1
-                    }]
+                    variantItems:[variantIds]
                 }
             }
             //console.log(options.body)
