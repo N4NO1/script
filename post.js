@@ -15,7 +15,7 @@ function handleRow(accessToken, environment) {
                 },
                 json: true,
                 body: {
-                    variantItems:[variantIds]
+                    variantItems:data.variantIds.split(", ")
                 }
             }
             //console.log(options.body)
