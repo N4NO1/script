@@ -19,9 +19,11 @@ function handleRow(accessToken, environment, length) {
                 }
             }
             //console.log(options.body)
+            var progress = Number
             request(options, function handlePostResponse(error, response, body) {
                 var date = new Date()
-                console.log(counter+1+"/"+length,date.toISOString(),"PATCH", options.url, "--", response.statusCode, response.statusCode === 202 ? "SUCCESS" : "ERROR -- " + body.message)   
+                progress = counter/length*100
+                console.log(progress.toFixed(2) + "%",date.toISOString(),"PATCH", options.url, "--", response.statusCode, response.statusCode === 202 ? "SUCCESS" : "ERROR -- " + body.message)   
                 counter++        
                 return resolve()
             })
