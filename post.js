@@ -5,7 +5,7 @@ let counter = 0
 function handleRow(accessToken, environment, length) {
     return function postData(data) {
         return new Promise((resolve, reject) => {
-            const { itemId,variantIds} = data // is this how to grab data from CSV??
+            const {itemId,variantIds} = data // this maps the headings
             const simpleUrl = "https://api." + (environment === "prod" ? "" : "dev." ) + "stok.ly/v0/variable-items/" + itemId
             const options = {
                 url: simpleUrl,
