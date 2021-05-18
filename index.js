@@ -14,22 +14,26 @@ if (!(source && accessToken)) {
     process.exit(1)
 }
 
-let length = 0
+var length = 0
 
 const sum = fs.createReadStream(source)
+.pipe(csv({mapHeaders: ({header, index}) => header.trim
+}))
 .on("data", () => {
     length++
 })
-.on("end", () => {console.log(length)})
+.on("end", () => {
+    console.log(length)
 
-// const processData = handleRow(accessToken, environment, length)
+    const processData = handleRow(accessToken, environment, length)
 
-// const stream = fs.createReadStream(source)
-// .pipe(csv({
-//     mapHeaders: ({ header, index }) => header.trim()
-// }))
-// .on("data", (data) => {
-//     stream.pause()
-//     processData(data).then(() => { stream.resume() })
-// })
-// .on("end", () => { console.log("done") })
+    const stream = fs.createReadStream(source)
+    .pipe(csv({
+        mapHeaders: ({ header, index }) => header.trim()
+    }))
+    .on("data", (data) => {
+        stream.pause()
+        processData(data).then(() => { stream.resume() })
+    })
+    .on("end", () => { console.log("done") })
+})
