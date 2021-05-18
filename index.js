@@ -16,18 +16,15 @@ if (!(source && accessToken)) {
 
 var length = 0
 
-const sum = fs.createReadStream(source)
-.pipe(csv({mapHeaders: ({header, index}) => header.trim
-}))
-.on("data", () => {
-    length++
-})
+const sum = fs.createReadStream(source) //Initial read of file -> gets line count
+.pipe(csv({mapHeaders: ({header, index}) => header.trim}))
+.on("data", () => {length++})
 .on("end", () => {
-    console.log(length)
+    //console.log(length)
 
-    const processData = handleRow(accessToken, environment, length)
+    const processData = handleRow(accessToken, environment, length) //passes data to function in post.js to send requests
 
-    const stream = fs.createReadStream(source)
+    const stream = fs.createReadStream(source) //filestream to send csv data for requests
     .pipe(csv({
         mapHeaders: ({ header, index }) => header.trim()
     }))
