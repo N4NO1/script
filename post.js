@@ -1,12 +1,12 @@
 const request = require("request")
 var dateString = String()
 module.exports = handleRow
-let counter = 0
+let counter = 1
 function handleRow(accessToken, environment, length) {
     return function postData(data) {
         return new Promise((resolve, reject) => {
-            const {itemId,variantIds} = data // this maps the headings
-            const simpleUrl = "https://api." + (environment === "prod" ? "" : "dev." ) + "stok.ly/v0/variable-items/" + itemId
+            const {saleId} = data // this maps the headings
+            const simpleUrl = "https://api." + (environment === "prod" ? "" : "dev." ) + "stok.ly/v1/saleorders/" + saleId
             const options = {
                 url: simpleUrl,
                 method: "PATCH",
@@ -14,9 +14,7 @@ function handleRow(accessToken, environment, length) {
                     authorization: "Bearer " + accessToken
                 },
                 json: true,
-                body: {
-                    variantItems:data.variantIds.split(", ")
-                }
+                body: {}
             }
             //console.log(options.body)
             var progress = Number
