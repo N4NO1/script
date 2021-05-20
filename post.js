@@ -5,8 +5,8 @@ let counter = 1
 function handleRow(accessToken, environment, length) {
     return function postData(data) {
         return new Promise((resolve, reject) => {
-            const {saleId} = data // this maps the headings
-            const simpleUrl = "https://api." + (environment === "prod" ? "" : "dev." ) + "stok.ly/v1/saleorders/" + saleId
+            const {itemId, variantIds} = data // this maps the headings
+            const simpleUrl = "https://api." + (environment === "prod" ? "" : "dev." ) + "stok.ly/v0/variable-items/" + itemId
             const options = {
                 url: simpleUrl,
                 method: "PATCH",
@@ -14,7 +14,9 @@ function handleRow(accessToken, environment, length) {
                     authorization: "Bearer " + accessToken
                 },
                 json: true,
-                body: {}
+                body: {
+                    variantItems:[variantIds.split(", ")]
+                }
             }
             //console.log(options.body)
             var progress = Number

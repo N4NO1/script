@@ -5,12 +5,13 @@ const handleRow = require("./post")
 const source = process.argv[2]
 const accessToken = process.argv[3]
 const environment = process.argv[4] || "dev"
+const timeDelay = process.argv[5] || 0
 
 
 
 if (!(source && accessToken)) {
     console.log("missing arguments")
-    console.log("node index.js sourceFile accessToken [environment (default=dev)]")
+    console.log("node index.js sourceFile accessToken [environment (default=dev)] timeDelay")
     process.exit(1)
 }
 
@@ -30,7 +31,7 @@ const sum = fs.createReadStream(source) //Initial read of file -> gets line coun
     }))
     .on("data", (data) => {
         stream.pause()
-        processData(data).then(() => { stream.resume() })
+        processData(data).then(() => { setTimeout(() =>{stream.resume()},timeDelay) })
     })
     .on("end", () => { console.log("done") })
 })
