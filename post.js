@@ -15,7 +15,7 @@ function handleRow(accessToken, environment, length) {
                 },
                 json: true,
                 body: {
-                    variantItems:variantIds.split(", ")
+                    variantItems:variantIds.split(",")
                 }
             }
             //console.log(options.body)
