@@ -23,7 +23,7 @@ function handleRow(accessToken, environment, length) {
             request(options, function handlePostResponse(error, response, body) {
                 var date = new Date()
                 progress = counter/length*100
-                console.log(progress.toFixed(2) + "%",date.toISOString(),"PATCH", options.url, "--", response.statusCode, response.statusCode === 202 ? "SUCCESS" : "ERROR -- " + body.message)   
+                console.log(progress.toFixed(2) + "%",date.toISOString,"PATCH", options.url, "--", response.statusCode, response.statusCode === 202 ? "SUCCESS" : "ERROR -- " + body.message)   
                 counter++        
                 return resolve()
             })
