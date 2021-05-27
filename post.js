@@ -6,16 +6,16 @@ function handleRow(accessToken, environment, length) {
     return function postData(data) {
         return new Promise((resolve, reject) => {
             const {itemId, variantIds} = data // this maps the headings
-            const simpleUrl = "https://api." + (environment === "prod" ? "" : "dev." ) + "stok.ly/v0/variable-items/" + itemId
+            const simpleUrl = "https://api." + (environment === "prod" ? "" : "dev." ) + "stok.ly/v0/items"
             const options = {
                 url: simpleUrl,
-                method: "PATCH",
+                method: "GET",
                 headers: {
                     authorization: "Bearer " + accessToken
                 },
                 json: true,
                 body: {
-                    variantItems:variantIds.split(",")
+                    //variantItems:variantIds.split(",")
                 }
             }
             //console.log(options.body)
