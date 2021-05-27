@@ -46,6 +46,24 @@ function handleListing(listingId){
             url: "https://api." + (environment === "prod" ? "" : "dev." ) + "stok.ly/v0/listings/" + listingId,
             method: "PATCH",
             headers: {authorization: "Bearer " + accessToken},
+            body: {
+                ageRestriction: null,
+                allowNegativeInventory: null,
+                attributes: [],
+                barcode: null,
+                channelSpecifics: [],
+                description: null,
+                listIndividually: true,
+                manufacturer: null,
+                maximumQuantity: null,
+                minimumMargin: null,
+                minimumQuantity: null,
+                mpn: null,
+                salePrice: {"amount": null,"currency": null},
+                sku: null,
+                taxRate: null,
+                weight: null,
+            }
         }
         request(options, function handlePostResponse(error,responseP,bodyP) {
             console.log("PATCH",listingId, responseP.statusCode, responseP.statusCode === 202 ? "SUCCESS" : "ERROR -- " + bodyP.message)
