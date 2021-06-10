@@ -75,16 +75,13 @@ async function handleChannel(){
         const postResponse = await makeRequest(collectOptions)
         console.log("POST",saleId,postResponse.response.statusCode, postResponse.response.statusCode === 202 ? "SUCCESS" : "ERROR -- " + postResponse.body.message)
         console.log()
-        
+
         //end of loop
     }
-    i
     pageNumber++
 } while (results === 100 )
     console.log("DONE")  
-
-    
-    
+ 
 }
 function makeRequest(options){
     return new Promise((resolve, reject) =>{
