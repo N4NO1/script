@@ -5,6 +5,8 @@ const accessToken= process.argv[2]
 const environment = process.argv[3] || "dev"
 const timeDelay = process.argv[4] || 0
 const locationId = process.argv[5]
+
+
 if (locationId === "help"){
     console.log("node index.js accessToken [environment (default=dev)] timeDelay locationId"),
     process.exit(1)
@@ -14,8 +16,9 @@ if (!(locationId && accessToken)) {
     console.log("node collectitems.js accessToken [environment (default=dev)] timeDelay locationId")
     process.exit(1)
 }
+
     var ignoreIdArray = []
-    const stream = fs.createReadStream("ignore.csv") 
+    const stream = fs.createReadStream("ignore.csv")  //stream read checks ignore.csv for sale orders to ignore
     .pipe(csv({
         mapHeaders: ({ header, index }) => header.trim()
     }))
@@ -23,7 +26,6 @@ if (!(locationId && accessToken)) {
         stream.pause()
         const {ignoreId} = data
         ignoreIdArray.push(ignoreId)
-        ignoreIdArray = ignoreIdArray
         stream.resume()
     })
     .on("end", () => { 
@@ -31,19 +33,24 @@ if (!(locationId && accessToken)) {
         handleSales()
     })
 
+
+
 async function handleSales(){
-    //sets options for Get channel request
+    //sets options for first request, this tells us how many orders there are
     const getTotalOptions={
             url: "https://api." + (environment === "prod" ? "" : "dev." ) + "stok.ly/v1/saleorders",
             method: "GET",
             headers: {authorization: "Bearer " + accessToken}
     }
-    //console.log(channelOptions.url)
+
+ 
     const totalResponse = await makeRequest(getTotalOptions)
     const totalData = JSON.parse(totalResponse.body)
     console.log("Listing Total:", totalData.metadata.count)
     var pageNumber = 0
     var results = 0
+
+
     do {
         const saleOptions={
         url: "https://api." + (environment === "prod" ? "" : "dev." ) + "stok.ly/v1/saleorders?page="+pageNumber,
@@ -56,15 +63,18 @@ async function handleSales(){
     // console.log(saleResponse)
 
     for (var i=0;i <= (JSON.parse(pageResponse.body).data.length-1); i++){
-        results = JSON.parse(pageResponse.body).data.length
+        results = JSON.parse(pageResponse.body).data.length //could define outside of loop and then use in logic?
         console.log(pageNumber,i)
         //start of loop
-        var saleId =""
+        var saleId ="" //defines saleId as a string
+
         saleId= JSON.parse(pageResponse.body).data[i].saleOrderId
         niceId = JSON.parse(pageResponse.body).data[i].niceId
 
+        //checks if the order Id is on the ignore document
         if (ignoreIdArray.includes(niceId+""))
         {console.log("ignoring order:",niceId)}
+        //start of else
         else{
             console.log(saleId)
             const saleItemOptions={
@@ -75,13 +85,15 @@ async function handleSales(){
 
             saleItemOptions.url = "https://api." + (environment === "prod" ? "" : "dev." ) + "stok.ly/v1/saleorders/" +saleId +"/items"
             const saleItemResponse = await makeRequest(saleItemOptions)
+
             var listings =[]
             const saleData = JSON.parse(saleItemResponse.body)
-            
+        
             for (const j in saleData.data){
                 listings.push({lineId: saleData.data[j].lineId, quantity: saleData.data[j].quantity})
             }
-            // console.log(listings)
+
+
             const collectOptions={
                 url: "https://api." + (environment === "prod" ? "" : "dev." ) + "stok.ly/v1/saleorders/"+saleId+"/collect-items",
                 method: "POST",
@@ -92,13 +104,13 @@ async function handleSales(){
                     locationId: locationId
                 }
             }
-            // console.log(collectOptions)
-            // console.log(listings)
+
             const postResponse = await makeRequest(collectOptions)
             console.log("POST",saleId,postResponse.response.statusCode, postResponse.response.statusCode === 202 ? "SUCCESS" : "ERROR -- " + postResponse.body.message)
             console.log()
     
         }
+        //end of else
         //end of loop
     }
     pageNumber++
