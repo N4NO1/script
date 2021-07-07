@@ -54,7 +54,7 @@ async function handleSku(searchSku, newSku){
             console.log("found SKU -",getResponse.body.data[i-1].sku)
             var itemId = getResponse.body.data[0].itemId
             const patchBody = {sku:newSku}
-            patchItem(itemId,patchBody)
+            await patchItem(itemId,patchBody)
             found = true
         }
         else if (i>= getResponse.body.metadata.count) {
