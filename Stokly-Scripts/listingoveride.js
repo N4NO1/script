@@ -1,8 +1,10 @@
 var request = require("request")
+const fs = require("fs")
+const csv = require("csv-parser")
 const accessToken= process.argv[2]
 const environment = process.argv[3] || "dev"
-const timeDelay = process.argv[4] || 0
-const channelId = process.argv[5]
+const channelId = process.argv[4]
+const csvDelay = process.argv[5] || 0
 if (channelId === "help"){
     console.log("node index.js accessToken [environment (default=dev)] [timeDelay (default=0)] channelId"),
     process.exit(1)
@@ -14,20 +16,48 @@ if (!(channelId && accessToken)) {
 }
 handleChannel(channelId)
 
+// const searchOptions={
+//     method: "GET",
+//     headers: {authorization: "Bearer " + accessToken},
+//     json: true,
+// }
+// const stream = fs.createReadStream("Input CSVs\\listings.csv")
+// .pipe(csv({
+//     mapHeaders: ({header, index}) => header.trim()
+// }))
+// .on("data", (data) =>{
+//     stream.pause()
+//     const {sku} = data
+//     handleSku(sku).then(() => { setTimeout(() =>{stream.resume()},csvDelay) })
+// })
+// .on("end", () => { 
+//     console.log("Done")
+// })
+// async function handleSku(sku){
+//     searchOptions.url = ("https://api." + (environment === "prod" ? "" : "dev." ) + "stok.ly/v0/channels/"+channelId +"/listings?filter=[sku]=={"+sku+"}")
+//     const searchResponse = await makeRequest(searchOptions)
+//     console.log("GET",searchOptions.url,searchResponse.response.statusCode, searchResponse.response.statusCode === 200 ? "SUCCESS" : "ERROR -- " + searchResponse.body.message || "No Body")
+//     if(searchResponse.response.statusCode === 200){
+//     if (searchResponse.body.metadata.count !== 0){
+//     await handleListing(searchResponse.body.data[0])
+//     } else {console.log("SKU "+sku+" not found")}
+// }
+// }
+
 async function handleChannel(channelId){
 
     const getTotalOptions={
-            url: "https://api." + (environment === "prod" ? "" : "dev." ) + "stok.ly/v0/channels/" + channelId +"/listings?size=1&filter=(%5BdataSynchronised%5D%3A%3A%7B0%7D)%26%26(%5Bstatus%5D!%3D%7B2%7D)",
+            url: "https://api." + (environment === "prod" ? "" : "dev." ) + "stok.ly/v0/channels/" + channelId +"/listings?size=1&filter=[status]!={2}",
             method: "GET",
             headers: {authorization: "Bearer " + accessToken}
     }
-
     const totalResponse = await makeRequest(getTotalOptions)
+    console.log(totalResponse.response.statusCode, getTotalOptions.url)
     const totalData = JSON.parse(totalResponse.body)
     console.log("Listing Total:", totalData.metadata.count)
     for (var i=0;i+1 <= Math.ceil(totalData.metadata.count/100) ; i++){
         const channelOptions={
-            url: "https://api." + (environment === "prod" ? "" : "dev." ) + "stok.ly/v0/channels/" + channelId +"/listings?size=100&filter=(%5BdataSynchronised%5D%3A%3A%7B0%7D)%26%26(%5Bstatus%5D!%3D%7B2%7D)&page="+i,
+            url: "https://api." + (environment === "prod" ? "" : "dev." ) + "stok.ly/v0/channels/" + channelId +"/listings?size=100&filter=[status]!={2}&page="+i,
             method: "GET",
             headers: {authorization: "Bearer " + accessToken}
         }
@@ -38,21 +68,24 @@ async function handleChannel(channelId){
     const channelData = JSON.parse(channelResponse.body)
     console.log("removing overide of",channelData.data.length, "listings")
     for (const listing of channelData.data){
-        const getOptions={
-            url: "https://api.stok.ly/v0/listings/"+listing.listingId,
-            method: "GET",
-            headers: {authorization: "Bearer " + accessToken},
-            json: true,
-        }
-
-        getListingData = await makeRequest(getOptions)
-        console.log("GET",getOptions.url,getListingData.response.statusCode, getListingData.response.statusCode === 200 ? "SUCCESS" : "ERROR -- " + getListingData.body.message || "No Body")
-       const listingOptionsConst = listingOptions(listing.listingId, false,getListingData.body.data)
-        listingResponse = await makeRequest(listingOptionsConst)
-        console.log("PATCH",listingOptionsConst.url,listingResponse.response.statusCode, listingResponse.response.statusCode === 202 ? "SUCCESS" : "ERROR -- " + listingResponse.body.message || "No Body")
+        await handleListing(listing)
     }
     }
     console.log("DONE")
+}
+async function handleListing(listing){
+    const getOptions={
+        url: "https://api.stok.ly/v0/listings/"+listing.listingId,
+        method: "GET",
+        headers: {authorization: "Bearer " + accessToken},
+        json: true,
+    }
+
+    getListingData = await makeRequest(getOptions)
+    console.log("GET",getOptions.url,getListingData.response.statusCode, getListingData.response.statusCode === 200 ? "SUCCESS" : "ERROR -- " + getListingData.body.message || "No Body")
+   const listingOptionsConst = listingOptions(listing.listingId, true,getListingData.body.data)
+    listingResponse = await makeRequest(listingOptionsConst)
+    console.log("PATCH",listingOptionsConst.url,listingResponse.response.statusCode, listingResponse.response.statusCode === 202 ? "SUCCESS" : "ERROR -- " + listingResponse.body.message || "No Body")
 }
 function makeRequest(options){
     return new Promise((resolve, reject) =>{
@@ -93,7 +126,7 @@ if (overideAll === true) {
     }
 } else {
     listingBody.sku = null
-    listingBody.salePrice = listingBody.data.salePrice
+    listingBody.salePrice = null
     listingBody.description = listingBody.data.description ?? null
     listingBody.attributes = listingBody.data.attributes ?? null
     delete listingBody.data
