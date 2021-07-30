@@ -6,7 +6,7 @@ const environment = process.argv[3]
 const timeDelay = process.argv[4]
 const companyId = process.argv[5]
 
-
+//test
 const stream = fs.createReadStream("Input CSVs\\balances.csv")  //stream read checks ignore.csv for sale orders to ignore
     .pipe(csv({
         mapHeaders: ({ header, index }) => header.trim()
