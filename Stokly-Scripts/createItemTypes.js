@@ -7,7 +7,7 @@ const timeDelay = process.argv[4]
 
 
 
-const stream = fs.createReadStream("itemtypes.csv")  //stream read checks ignore.csv for sale orders to ignore
+const stream = fs.createReadStream("Input CSVs\\itemtypes.csv")  //stream read checks ignore.csv for sale orders to ignore
     .pipe(csv({
         mapHeaders: ({ header, index }) => header.trim()
     }))

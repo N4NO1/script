@@ -18,7 +18,7 @@ if (!(locationId && accessToken)) {
 }
 
     var ignoreIdArray = []
-    const stream = fs.createReadStream("ignore.csv")  //stream read checks ignore.csv for sale orders to ignore
+    const stream = fs.createReadStream("input CSVs\\ignore.csv")  //stream read checks ignore.csv for sale orders to ignore
     .pipe(csv({
         mapHeaders: ({ header, index }) => header.trim()
     }))

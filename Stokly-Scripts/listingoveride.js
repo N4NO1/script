@@ -1,6 +1,7 @@
 var request = require("request")
 const fs = require("fs")
 const csv = require("csv-parser")
+const { Console } = require("console")
 const accessToken= process.argv[2]
 const environment = process.argv[3] || "dev"
 const channelId = process.argv[4]
@@ -87,10 +88,14 @@ async function handleListing(listing){
     listingResponse = await makeRequest(listingOptionsConst)
     console.log("PATCH",listingOptionsConst.url,listingResponse.response.statusCode, listingResponse.response.statusCode === 202 ? "SUCCESS" : "ERROR -- " + listingResponse.body.message || "No Body")
 }
-function makeRequest(options){
+function makeRequest(options, retryAttempt = 0){
     return new Promise((resolve, reject) =>{
         request(options, (error, response, body) => {
-            if (error) {return reject(error)}
+            if (error) {
+                if (retryAttempt >= 1) { return reject(error || "Retryed 1 time and failed.") }
+                // try the request again 
+                return makeRequest(options, retryAttempt + 1)
+            }
             if (response.statusCode < 200 && response.statuscode > 299) {return reject(new error(body))}
             return resolve({body, response})
         })
@@ -132,5 +137,6 @@ if (overideAll === true) {
     delete listingBody.data
     options.body = {data:listingBody}
 }
+console.log(options)
 return options
 }
