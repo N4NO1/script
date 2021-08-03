@@ -76,18 +76,31 @@ async function handleChannel(channelId){
 }
 async function handleListing(listing){
     const getOptions={
-        url: "https://api.stok.ly/v0/listings/"+listing.listingId,
+        url: "https://api." + (environment === "prod" ? "" : "dev." ) +"stok.ly/v0/listings/"+listing.listingId,
         method: "GET",
         headers: {authorization: "Bearer " + accessToken},
         json: true,
     }
 
+    //Get listing by ID
     getListingData = await makeRequest(getOptions)
     console.log("GET",getOptions.url,getListingData.response.statusCode, getListingData.response.statusCode === 200 ? "SUCCESS" : "ERROR -- " + getListingData.body.message || "No Body")
-   const listingOptionsConst = listingOptions(listing.listingId, true,getListingData.body.data)
+    // console.log(listing, getListingData.body.data)
+    // true removes all overides, false removes specified overides
+   const listingOptionsConst = listingOptions(listing.listingId, false,getListingData.body.data)  
+
+
+   //Patch listing by ID
+   if (getListingData.response.statusCode == 200){
     listingResponse = await makeRequest(listingOptionsConst)
     console.log("PATCH",listingOptionsConst.url,listingResponse.response.statusCode, listingResponse.response.statusCode === 202 ? "SUCCESS" : "ERROR -- " + listingResponse.body.message || "No Body")
+   } 
+   else {
+        console.error("GET unsuccessful, skipping PATCH for:" + listing.listingId)
+    }
 }
+
+
 function makeRequest(options, retryAttempt = 0){
     return new Promise((resolve, reject) =>{
         request(options, (error, response, body) => {
@@ -101,6 +114,8 @@ function makeRequest(options, retryAttempt = 0){
         })
     })
 }
+
+
 function listingOptions(listingId, overideAll =Boolean, listingBody) {
     const options ={
     url: "https://api." + (environment === "prod" ? "" : "dev." ) + "stok.ly/v0/listings/" + listingId,
@@ -117,7 +132,7 @@ if (overideAll === true) {
         barcode: null,
         channelSpecifics: [],
         description: null,
-        listIndividually: true,
+        listIndividually: listingBody.data.listIndividually ,
         manufacturer: null,
         maximumQuantity: null,
         minimumMargin: null,
@@ -134,9 +149,9 @@ if (overideAll === true) {
     listingBody.salePrice = null
     listingBody.description = listingBody.data.description ?? null
     listingBody.attributes = listingBody.data.attributes ?? null
+    listingBody.listIndividually = listingBody.data.listIndividually 
     delete listingBody.data
     options.body = {data:listingBody}
 }
-console.log(options)
 return options
 }
