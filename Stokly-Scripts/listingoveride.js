@@ -147,9 +147,10 @@ if (overideAll === true) {
 } else {
     listingBody.sku = null
     listingBody.salePrice = null
-    listingBody.description = listingBody.data.description ?? null
+    listingBody.name = null
+    listingBody.description = null
     listingBody.attributes = listingBody.data.attributes ?? null
-    listingBody.listIndividually = listingBody.data.listIndividually 
+    listingBody.listIndividually = listingBody.data.listIndividually
     delete listingBody.data
     options.body = {data:listingBody}
 }
