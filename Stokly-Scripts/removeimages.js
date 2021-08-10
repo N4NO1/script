@@ -12,7 +12,7 @@ const stream = fs.createReadStream("Input CSVs\\removeimages.csv")
 .on("data", (data) =>{
     stream.pause()
     const {itemId} = data
-    handleId(itemId).then(() => { setTimeout(() =>{stream.resume()},csvDelay) })
+    handleId(itemId).then(() => { setTimeout(() =>{stream.resume()},100) })
 })
 .on("end", () => { 
     console.log("Done")
@@ -23,13 +23,13 @@ const stream = fs.createReadStream("Input CSVs\\removeimages.csv")
 async function handleId(itemId) {
 
     const patchOptions = {
+        // need to ensure that if the error is 400, try with variable-items instead
         url: "https://api."+(environment === "prod"?"":"dev.")+"stok.ly/v0/items/"+ itemId,
         method: "PATCH",
         headers: {authorization: "Bearer " + accessToken},
         json: true,
         body: {images: []}
     }
-
     const patchResponse = await makeRequest(patchOptions)
     console.log("PATCH",itemId,patchResponse.response.statusCode, patchResponse.response.statusCode === 202 ? "success" : "error --" + patchResponse.response.body || "No Body")
 }
