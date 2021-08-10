@@ -11,7 +11,7 @@ const stream = fs.createReadStream("Input CSVs\\removeimages.csv")
 }))
 .on("data", (data) =>{
     stream.pause()
-    const {sku} = data
+    const {itemId} = data
     handleId(itemId).then(() => { setTimeout(() =>{stream.resume()},csvDelay) })
 })
 .on("end", () => { 
