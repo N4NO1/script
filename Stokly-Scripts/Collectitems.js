@@ -38,7 +38,7 @@ if (!(locationId && accessToken)) {
 async function handleSales(){
     //sets options for first request, this tells us how many orders there are
     const getTotalOptions={
-            url: "https://api." + (environment === "prod" ? "" : "dev." ) + "stok.ly/v1/saleorders",
+            url: "https://api." + (environment === "prod" ? "" : "dev." ) + "stok.ly/v1/saleorders?filter=[itemStatuses]::{unprocessed}",
             method: "GET",
             headers: {authorization: "Bearer " + accessToken}
     }
@@ -53,7 +53,7 @@ async function handleSales(){
 
     do {
         const saleOptions={
-        url: "https://api." + (environment === "prod" ? "" : "dev." ) + "stok.ly/v1/saleorders?page="+pageNumber,
+        url: "https://api." + (environment === "prod" ? "" : "dev." ) + "stok.ly/v1/saleorders?filter=[itemStatuses]::{unprocessed}&page="+pageNumber,
         method: "GET",
         headers: {authorization: "Bearer " + accessToken}
         }

@@ -10,7 +10,7 @@ getAllMappings()
 
 async function getAllMappings() {
     const allMappingOptions = {
-        url : "https://"+companyId+".webapp-api.dev.stok.ly/channels/" + fromChannel + "/mappings?size=1000&filter=",
+        url : "https://"+companyId+".webapp-api.stok.ly/channels/" + fromChannel + "/mappings?size=1000&filter=",
         method: "GET",
         headers: {authorization: "Bearer " + accessToken}
     }
@@ -34,7 +34,7 @@ async function handleMapping(mapping) {
 
 async function getOneMapping(id) {
     const oneMappingOptions = {
-        url : "https://api.dev.stok.ly/v0/mappings/" + id +"/attributes",
+        url : "https://"+companyId+".webapp-api.stok.ly/mappings/" + id +"/attributes",
         method: "GET",
         headers: {authorization: "Bearer " + accessToken}
     }
@@ -42,8 +42,8 @@ async function getOneMapping(id) {
     const response = await makeRequest(oneMappingOptions)
     console.log("GET one mapping",oneMappingOptions.url,"--", response.response.statusCode, response.response.statusCode === 200 ? "SUCCESS" : "ERROR -- " + response.body.message)
     const body = JSON.parse(response.body)
-
-    const attributeArray = await convertAttributes(body.data)
+    //console.log(body)
+    const attributeArray = await convertAttributes(body.items)
 
     return attributeArray
 }
@@ -67,7 +67,7 @@ async function createMapping(attributes, mappingData) {
     const mappingValues = await getMappingValues(mappingData.mappingId)
 
     const createOptions = {
-        url: "https://"+companyId+".core-api.dev.stok.ly/mappings/",
+        url: "https://"+companyId+".core-api.stok.ly/mappings/",
         method: "POST",
         headers: {authorization: "Bearer " + accessToken},
         json:true,
@@ -89,7 +89,7 @@ async function createMapping(attributes, mappingData) {
 
 async function getMappingValues(id) {
     const getOptions = {
-        url: "https://"+companyId+".webapp-api.dev.stok.ly/mappings/" + id,
+        url: "https://"+companyId+".webapp-api.stok.ly/mappings/" + id,
         method: "GET",
         headers: {authorization: "Bearer " + accessToken},
     }
