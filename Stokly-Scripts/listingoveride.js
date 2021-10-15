@@ -146,13 +146,12 @@ if (overideAll === true) {
     }
 } else {
     listingBody.sku = null
-    listingBody.salePrice = null
-    listingBody.name = null
-    listingBody.description = null
     listingBody.attributes = listingBody.data.attributes ?? null
     listingBody.listIndividually = listingBody.data.listIndividually
+    listingBody.salePrice = null
     delete listingBody.data
     options.body = {data:listingBody}
 }
+// console.log(options)
 return options
 }

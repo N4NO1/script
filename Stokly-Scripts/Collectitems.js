@@ -1,6 +1,7 @@
 var request = require("request")
 const fs = require("fs")
 const csv = require("csv-parser")
+const { Console } = require("console")
 const accessToken= process.argv[2]
 const environment = process.argv[3] || "dev"
 const timeDelay = process.argv[4] || 0
@@ -48,8 +49,7 @@ async function handleSales(){
     const totalData = JSON.parse(totalResponse.body)
     console.log("Listing Total:", totalData.metadata.count)
     var pageNumber = 0
-    var results = 0
-
+    var pageSize = 0
 
     do {
         const saleOptions={
@@ -58,13 +58,12 @@ async function handleSales(){
         headers: {authorization: "Bearer " + accessToken}
         }
 
-    const pageResponse = await makeRequest(saleOptions)
+    const pageResponse = await makeRequest(saleOptions) || 0
     console.log("GET","total orders:",totalData.metadata.count ,"--", pageResponse.response.statusCode, pageResponse.response.statusCode === 200 ? "SUCCESS" : "ERROR -- " + pageResponse.body.message)
     // console.log(saleResponse)
-
-    for (var i=0;i <= (JSON.parse(pageResponse.body).data.length-1); i++){
-        results = JSON.parse(pageResponse.body).data.length //could define outside of loop and then use in logic?
-        console.log(pageNumber,i)
+        pageSize = JSON.parse(pageResponse.body).data.length
+    for (var i=0;i <= (pageSize-1); i++){
+        console.log("Page:"+pageNumber,"||","Order:"+(i+1) +" of " + pageSize)
         //start of loop
         var saleId ="" //defines saleId as a string
 
@@ -77,6 +76,7 @@ async function handleSales(){
         //start of else
         else{
             console.log(saleId)
+            //get items on order options
             const saleItemOptions={
                 method: "GET",
                 headers: {authorization: "Bearer " + accessToken}
@@ -85,6 +85,8 @@ async function handleSales(){
 
             saleItemOptions.url = "https://api." + (environment === "prod" ? "" : "dev." ) + "stok.ly/v1/saleorders/" +saleId +"/items"
             const saleItemResponse = await makeRequest(saleItemOptions)
+            console.log("GET",saleId,saleItemResponse.response.statusCode, saleItemResponse.response.statusCode === 200 ? "SUCCESS" : "ERROR -- " + saleItemResponse.body.message)
+
 
             var listings =[]
             const saleData = JSON.parse(saleItemResponse.body)
@@ -93,7 +95,7 @@ async function handleSales(){
                 listings.push({lineId: saleData.data[j].lineId, quantity: saleData.data[j].quantity})
             }
 
-
+//options for posting the collection request
             const collectOptions={
                 url: "https://api." + (environment === "prod" ? "" : "dev." ) + "stok.ly/v1/saleorders/"+saleId+"/collect-items",
                 method: "POST",
@@ -104,6 +106,9 @@ async function handleSales(){
                     locationId: locationId
                 }
             }
+            console.log(collectOptions.url)
+        
+            console.log(collectOptions.body)
 
             const postResponse = await makeRequest(collectOptions)
             console.log("POST",saleId,postResponse.response.statusCode, postResponse.response.statusCode === 202 ? "SUCCESS" : "ERROR -- " + postResponse.body.message)
@@ -114,7 +119,7 @@ async function handleSales(){
         //end of loop
     }
     pageNumber++
-} while (results === 100 )
+} while (pageSize === 100 )
     console.log("DONE")  
  
 }
