@@ -11,8 +11,8 @@ if (!(accessToken)) {
     console.log("node index.js accessToken [environment (default=dev)] [timeDelay (default=0)]")
     process.exit(1)
 }
-handleChannel()
-async function handleChannel(){
+handleSales()
+async function handleSales(){
     //sets options for Get channel request
     const getTotalOptions={
             url: "https://api." + (environment === "prod" ? "" : "dev." ) + "stok.ly/v1/saleorders",
@@ -27,7 +27,7 @@ async function handleChannel(){
     var results = 0
     do {
         const saleOptions={
-        url: "https://api." + (environment === "prod" ? "" : "dev." ) + "stok.ly/v1/saleorders?page="+pageNumber,
+        url: "https://api." + (environment === "prod" ? "" : "dev." ) + "stok.ly/v1/saleorders?sortDirection=ASC&page="+pageNumber,
         method: "GET",
         headers: {authorization: "Bearer " + accessToken}
         }
@@ -35,14 +35,14 @@ async function handleChannel(){
     const pageResponse = await makeRequest(saleOptions)
     console.log("GET","total orders:",totalData.metadata.count ,"--", pageResponse.response.statusCode, pageResponse.response.statusCode === 200 ? "SUCCESS" : "ERROR -- " + pageResponse.body.message)
     // console.log(saleResponse)
-
-    for (var i=0;i <= (JSON.parse(pageResponse.body).data.length-1); i++){
-        results = JSON.parse(pageResponse.body).data.length
-        console.log(pageNumber,i)
+    results = JSON.parse(pageResponse.body).data.length
+    console.log("Got",results,"Orders")
+    for (var i=0;i <= (results-1); i++){
+        console.log("page:",pageNumber,"Order:",i+1)
         //start of loop
         var saleId =""
         saleId= JSON.parse(pageResponse.body).data[i].saleOrderId
-        console.log(saleId)
+        // console.log(saleId)
         const patchOptions={
             url: "https://api." + (environment === "prod" ? "" : "dev." ) + "stok.ly/v1/saleorders/"+saleId,
             method: "Patch",
