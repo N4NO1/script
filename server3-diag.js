@@ -124,11 +124,11 @@ async function sendEmail(bodyHtml) {
       
       sendPromise.then(
         function(data) {
-          console.log(data.MessageId)
+        //   console.log(data.MessageId)
           return true
         }).catch(
           function(err) {
-          console.error(err, err.stack)
+        //   console.error(err, err.stack)
           return false
         })
 }
