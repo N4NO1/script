@@ -1,7 +1,7 @@
 var request = require('request')
 const { Console } = require("console")
 var AWS = require('aws-sdk')
-const interval = process.argv[2] || 10000
+const interval = process.argv[2] || 300000
 const timeDelay = 100
 // Set the region 
 AWS.config.update({region: 'eu-west-1'})
@@ -45,6 +45,7 @@ setInterval(async function checkServer(){
         const endTime = new Date()
         const reqTime = endTime - startTime
         console.log(sites[site].url, "responded " + siteResponse.response.statusCode + " in " + reqTime +"ms")
+        
         if (siteResponse.response.statusCode != 200 ) {
             sites[site].errors++
         }
@@ -56,7 +57,7 @@ setInterval(async function checkServer(){
 
     // console.log(sites)
     var body = await anyErrors()
-    console.log(body)
+    // console.log(body)
     if (body == null) {}
     else {
         const emailsSuccessful = await sendEmail(body)
@@ -64,7 +65,7 @@ setInterval(async function checkServer(){
         else {console.log("email notification failed")}
     }
 
-    console.log("Waiting")
+    console.log("Waiting " + interval + "ms")
 
 }, interval)
 
