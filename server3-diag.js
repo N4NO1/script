@@ -1,10 +1,12 @@
 var request = require('request')
 const { Console } = require("console")
 var AWS = require('aws-sdk')
+const interval = process.argv[2] || 10000
+const timeDelay = 100
 // Set the region 
 AWS.config.update({region: 'eu-west-1'})
 
-const interval = process.argv[2]
+console.log("Overwatch started")
 
 const emails = [
     'n.rouse@stok.ly',
@@ -29,43 +31,56 @@ var sites = [
 
 
 setInterval(async function checkServer(){
-    console.log("running")
+    console.log("Overwatch Running")
     // console.log(sites)
     for(var site in sites) {
         
         const siteOptions = {
             url: "https://" + sites[site].url,
             method: "GET"
-        }
-        console.log(siteOptions)
+        }   
+        // console.log(siteOptions)
+        const startTime = new Date()
         const siteResponse = await makeRequest(siteOptions)
-
+        const endTime = new Date()
+        const reqTime = endTime - startTime
+        console.log(sites[site].url, "responded " + siteResponse.response.statusCode + " in " + reqTime +"ms")
         if (siteResponse.response.statusCode != 200 ) {
             sites[site].errors++
         }
-        else{sites[site].errors = 0}
+        else{
+            sites[site].errors = 0
+        }
     }
 
 
-    var body = anyErrors()
-    if (body = null) {}
+    // console.log(sites)
+    var body = await anyErrors()
+    console.log(body)
+    if (body == null) {}
     else {
-        sendEmail(body)
+        const emailsSuccessful = await sendEmail(body)
+        if (emailsSuccessful == true) {console.log("email notification succeessfully queued")}
+        else {console.log("email notification failed")}
     }
 
+    console.log("Waiting")
 
 }, interval)
 
-function anyErrors() {
+
+
+async function anyErrors() {
     var htmlBody = ""
     for (var site of sites) {
         if (site.errors > 1) {
             htmlBody = htmlBody + ("<p>Site https://" + site.url + " has not been reachable for 2+ attempts (current interval : " + interval + "ms </p>")
         }
     }
-    if (htmlBody = "") {return null}
+    if (htmlBody == "") {return null}
     else {return htmlBody}
 }
+
 
 
 function makeRequest(options, retryAttempt = 0){
@@ -82,7 +97,9 @@ function makeRequest(options, retryAttempt = 0){
     })
 }
 
-function sendEmail(bodyHtml) {
+
+
+async function sendEmail(bodyHtml) {
 
     var params = {
         Destination: { /* required */
@@ -108,8 +125,10 @@ function sendEmail(bodyHtml) {
       sendPromise.then(
         function(data) {
           console.log(data.MessageId)
+          return true
         }).catch(
           function(err) {
           console.error(err, err.stack)
+          return false
         })
 }
