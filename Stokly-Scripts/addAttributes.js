@@ -6,16 +6,9 @@ const { Console } = require("console")
 
 const accessToken= process.argv[2]
 const environment = process.argv[3]
-// const attributeIds = [
-//     "1adeb93a-bcf1-42d6-9cd9-839e3f64c1d1",
-//     "1bde7945-12ac-49c4-a706-31d857a0bbac",
-//     "23bf7c3d-cddd-4727-b0ba-45c547022050",
-//     "4aef8a2e-8d24-4104-a123-7c77b7803837",
-//     "59728882-dcd3-4e6b-859a-e432e89c9d62",
-//     "610fb8c5-bea0-423a-b566-1356c1d5c526",
-//     "a631b87c-fa95-4736-81ab-a404a7720530",
-//     "fe80266d-5a94-48e6-8827-88407d723bd1"
-// ]
+const attributeIds = [
+    "eaa6afc1-ec9e-486b-a113-bba6522dce05","028c84ba-4590-416f-a4e6-796cec5116bf","c2260588-5752-4ec5-947b-4f5a06c6a0e6","c344246b-55f7-4395-a40e-a40409bd8889","9c12c1d5-5c97-482d-b972-a644b9ff14f7","09c336f9-693b-4ae0-a047-16c7fb7b962c","4067f646-a843-4959-9315-4c7ca2e8b679","1e59b1e0-afef-4819-ab83-565c5340a0dc","fc0066cf-830a-4f23-83d9-4bfd263ed665","4836592e-c187-4db3-959c-e35dd72b789a","c4f994b1-7e46-405d-aebf-7f53e8157e8e","d8be2159-fbef-4188-89a3-d9c554976429","70c16ad2-8d17-4229-a970-5d496ef6fc13","8769454d-587f-4564-8950-2cb6b90c8cbe"
+]
 
 
 typeControl()

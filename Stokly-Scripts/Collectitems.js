@@ -53,7 +53,7 @@ async function handleSales(){
 
     do {
         const saleOptions={
-        url: "https://api." + (environment === "prod" ? "" : "dev." ) + "stok.ly/v1/saleorders?filter=[itemStatuses]::{unprocessed}&page="+pageNumber,
+        url: "https://api." + (environment === "prod" ? "" : "dev." ) + "stok.ly/v1/saleorders?size=100&filter=[itemStatuses]::{unprocessed}&page="+pageNumber,
         method: "GET",
         headers: {authorization: "Bearer " + accessToken}
         }
