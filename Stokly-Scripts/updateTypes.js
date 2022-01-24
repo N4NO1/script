@@ -7,8 +7,10 @@ handler()
 async function handler() {
     const itemTypes = await getTypes()
     for (const type of itemTypes) {
-        const attributeArray = await getAssignedAttributes(type.itemTypeId)
-        await patchTypes(attributeArray, type.itemTypeId)
+        var attributeArray = []
+        attributeArray = await getAssignedAttributes(type.itemTypeId)
+
+        await patchTypes(attributeArray, type.itemTypeId, type.name)
     }
     console.log("done")
 }
@@ -50,29 +52,39 @@ async function getAssignedAttributes(typeId){
     
     var attributeIds = []
 
+    
+
     for (const attribute of assignedAttribute.body.data){
         attributeIds.push(attribute.itemAttributeId)
     }
+    
+    console.log("Attributes assigned %d", attributeIds.length)
 
+    if(attributeIds.length > 14) {
+        console.log(attributeIds)
+    }
+    
     return attributeIds
 }
 
 
-async function patchTypes(attributeIdArray, typeId){
+async function patchTypes(attributeIdArray, typeId, typeName){
     const options = {
         url: "https://api."+(environment === "prod" ? "" : "dev.") + "stok.ly/v0/item-types/"+typeId,
         method: "PATCH",
         headers: {authorization: "Bearer " + accessToken},
         json: true,
         body:{
-            itemAttributeIds:attributeIdArray
+            itemAttributeIds:attributeIdArray,
+            name: typeName
         }
     }
 
+    // console.log(options.body)
     const patchResponse = await makeRequest(options)
 
-    console.log(current.toISOString(),"|","PATCH Item Types",patchResponse.response.statusCode, patchResponse.response.statusCode === 202 ? "SUCCESS" : "ERROR -- " + patchResponse.body.message )
-
+    console.log(current.toISOString(),"|","PATCH Item Types.  Attributes:", attributeIdArray.length ,patchResponse.response.statusCode, patchResponse.response.statusCode === 202 ? "SUCCESS" : "ERROR -- " + patchResponse.body.message )
+    console.log("")
 }
 
 
