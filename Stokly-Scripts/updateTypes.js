@@ -38,7 +38,7 @@ async function getTypes() {
 async function getAssignedAttributes(typeId){
 
     const options = {
-        url: "https://api."+(environment === "prod" ? "" : "dev.") + "stok.ly/v0/item-types/"+typeId+"/attributes?size=1000",
+        url: "https://api."+(environment === "prod" ? "" : "dev.") + "stok.ly/v0/item-types/"+typeId+"/attributes?size=1000&filter=[status]!={1}",
         method: "GET",
         headers: {authorization: "Bearer " + accessToken},
         json: true
@@ -60,9 +60,6 @@ async function getAssignedAttributes(typeId){
     
     console.log("Attributes assigned %d", attributeIds.length)
 
-    if(attributeIds.length > 14) {
-        console.log(attributeIds)
-    }
     
     return attributeIds
 }
