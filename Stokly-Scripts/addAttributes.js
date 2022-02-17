@@ -17,8 +17,8 @@ const environment = process.argv[3]
 
 //attributes to add to item types
 const addAttributeIds = [
-    "2c141905-2ac9-46f8-b42b-dd964750c7ff",
-    "6a2d7257-5e73-451f-80e2-3533ba1117b9"
+    "2c141905-2ac9-46f8-b42b-dd964750c7ff", //bus speed
+    "6a2d7257-5e73-451f-80e2-3533ba1117b9" //ebay tax rate
 ]
 var skippedPages = []
 
@@ -75,11 +75,11 @@ async function getItemPage() {
                     outputArray.push(assignedAttributeId)
                 }
 
-                console.log("Existing attribute count :" + assignedAttributes.length, "Added attributes count :" + addAttributeIds, "Output attributes Count :" + outputArray.length)
+                console.log("Existing attribute count :" + assignedAttributes.length, "Added attributes count :" + addAttributeIds.length, "Output attributes Count :" + outputArray.length)
 
                 if (outputArray.length == (assignedAttributes.length + addAttributeIds.length)) {
-                    Console.log("Counts Match, patch item")
-                    await patchType(id, outputArray)
+                    console.log("Counts Match, patch item")
+                    await patchType(itemType.itemTypeId, outputArray)
                 } else {
                     console.error(">>>counts do not match!<<<")
                 }
@@ -147,7 +147,7 @@ async function patchType(id, attributeArray){
     const patchResponse = await makeRequest(patchOptions)
     current = new Date()
     
-    console.log(current.toISOString(),"|","Patch Item Type:"+id,itemTypeFullResponse.response.statusCode, itemTypeFullResponse.response.statusCode === 202 ? "SUCCESS" : "ERROR -- " + itemTypeFullResponse.body.message )
+    console.log(current.toISOString(),"|","Patch Item Type:"+id,patchResponse.response.statusCode, patchResponse.response.statusCode === 202 ? "SUCCESS" : "ERROR -- " + patchResponse.body.message )
 
 }
 
