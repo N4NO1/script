@@ -106,9 +106,9 @@ async function handleSales(){
                     locationId: locationId
                 }
             }
-            console.log(collectOptions.url)
+            // console.log(collectOptions.url)
         
-            console.log(collectOptions.body)
+            // console.log(collectOptions.body)
 
             const postResponse = await makeRequest(collectOptions)
             console.log("POST",saleId,postResponse.response.statusCode, postResponse.response.statusCode === 202 ? "SUCCESS" : "ERROR -- " + postResponse.body.message)
