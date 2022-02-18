@@ -17,18 +17,43 @@ const environment = process.argv[3]
 
 //attributes to add to item types
 const addAttributeIds = [
-    "2c141905-2ac9-46f8-b42b-dd964750c7ff", //bus speed
-    "6a2d7257-5e73-451f-80e2-3533ba1117b9" //ebay tax rate
+
 ]
 var skippedPages = []
 
-getItemPage()
+control().then( () => {
+console.log(skippedPages.length === 0 ? "Done" : "Done, but skipped pages :" + skippedPages)
+control(skippedPages)
+})
 
 
-async function getItemPage() {
-    var pageNumber = 0
-//get 100 item types a page at a time, until less that 100 are returned
-    do {
+async function control(pageArray = []) {
+    var page = 0
+    var length = 0
+    if (pageArray.length == 0) {
+        do {
+       length = await getTypePage(page)
+       page ++
+    } while (length == 100)
+    }
+    else{
+        var pageNumber = pageArray.shift()
+        while (pageNumber != undefined) {
+            console.log(">>>Retrying page #" + pageNumber + "<<<")
+            await getTypePage(pageNumber)
+            pageNumber = pageArray.shift()
+            await wait(5000)
+        }
+        console.log("Retryed all pages")
+    }
+
+    
+}
+
+async function getTypePage(pageNumber = 0) {
+
+        //get 100 item types a page at a time, until less that 100 are returned
+    
 
         //set options to get page x from stok.ly
         const getPageOptions = {
@@ -44,7 +69,7 @@ async function getItemPage() {
 
         //check the status of the response, was it successful? code=200
         console.log(current.toISOString(),"|","GET Item Types",itemTypePageFullResponse.response.statusCode, itemTypePageFullResponse.response.statusCode === 200 ? "SUCCESS" : "ERROR -- " + itemTypePageFullResponse.body.message )
-
+        
         //if the request was successful, get the page length and enter the rest of the code, else skip to next page
         if (itemTypePageFullResponse.response.statusCode == 200) {
 
@@ -53,12 +78,12 @@ async function getItemPage() {
 
             //set the page length for the do/while
             pageLength = itemTypePageBodyData.length
-
+            console.log(">>>Types returned :" + pageLength + "<<<")
             //for each item type run this loop
-            for(itemType of itemTypePageBodyData) {
+            for(const itemType of itemTypePageBodyData) {
 
                 //handle item type
-               const assignedAttributes = await handleIndividualType(itemType.itemTypeId)
+               const assignedAttributes = await getAssignedAttributes(itemType.itemTypeId)
 
                //if null is returned write a error message, and continue to next iteration
                 if (assignedAttributes == null)  {
@@ -67,11 +92,11 @@ async function getItemPage() {
                 }
                 var outputArray = []
                 console.log("adding new attributes")
-                for (addAttributeId of addAttributeIds){
+                for (const addAttributeId of addAttributeIds){
                     outputArray.push(addAttributeId)
                 }
                 console.log("adding existing attributes")
-                for (assignedAttributeId of assignedAttributes) {
+                for (const assignedAttributeId of assignedAttributes) {
                     outputArray.push(assignedAttributeId)
                 }
 
@@ -90,13 +115,11 @@ async function getItemPage() {
             skippedPages.push(pageNumber)
             console.error(">>>Skipped page #" + pageNumber + "<<<")
         }
+            return pageLength
 
-
-        pageNumber++
-    } while (pageLength == 100)
 }
 
-async function handleIndividualType(typeId) {
+async function getAssignedAttributes(typeId) {
     
     //Set options for getting an item type
     const getTypeOptions = {
@@ -116,7 +139,7 @@ async function handleIndividualType(typeId) {
             //create an empty array for existing IDs to be pushed to
             var existingAttributes = []
 
-            for (attribute of itemTypeFullResponse.body.data) {
+            for (const attribute of itemTypeFullResponse.body.data) {
 
                 //push existing attributes to the array
                 existingAttributes.push(attribute.itemAttributeId)
@@ -148,7 +171,7 @@ async function patchType(id, attributeArray){
     current = new Date()
     
     console.log(current.toISOString(),"|","Patch Item Type:"+id,patchResponse.response.statusCode, patchResponse.response.statusCode === 202 ? "SUCCESS" : "ERROR -- " + patchResponse.body.message )
-
+    console.log(">>><<<")
 }
 
 function makeRequest(options, retryAttempt = 0){
@@ -162,5 +185,11 @@ function makeRequest(options, retryAttempt = 0){
             if (response.statusCode < 200 && response.statuscode > 299) {return reject(new error(body))}
             return resolve({body, response})
         })
+    })
+}
+
+function wait(ms) {
+    return new Promise((resolve) => {
+      setTimeout(resolve, ms)
     })
 }
