@@ -83,31 +83,22 @@ async function getTypePage(pageNumber = 0) {
             for(const itemType of itemTypePageBodyData) {
 
                 //handle item type
-               const assignedAttributes = await getAssignedAttributes(itemType.itemTypeId)
+                const handlerResponse = await handleType(itemType)
 
-               //if null is returned write a error message, and continue to next iteration
-                if (assignedAttributes == null)  {
+                //handle response: -1 = error, 0 = counts do not match, 1 = success
+                switch(handlerResponse){
+                    case -1:
                     console.error(">>>skipping item type due to request error:" + itemType.name +"<<<")
-                    continue
+                    break;
+                    case 0:
+                        console.error(">>>counts do not match!<<<")
+                    break;
+                    case 1:
+                        console.log(">>>SUCCESS<<<")
+                    break;
                 }
-                var outputArray = []
-                console.log("adding new attributes")
-                for (const addAttributeId of addAttributeIds){
-                    outputArray.push(addAttributeId)
-                }
-                console.log("adding existing attributes")
-                for (const assignedAttributeId of assignedAttributes) {
-                    outputArray.push(assignedAttributeId)
-                }
-
-                console.log("Existing attribute count :" + assignedAttributes.length, "Added attributes count :" + addAttributeIds.length, "Output attributes Count :" + outputArray.length)
-
-                if (outputArray.length == (assignedAttributes.length + addAttributeIds.length)) {
-                    console.log("Counts Match, patch item")
-                    await patchType(itemType.itemTypeId, outputArray)
-                } else {
-                    console.error(">>>counts do not match!<<<")
-                }
+                console.log(">>><<<")
+                
             }
 
         } else {
@@ -116,6 +107,36 @@ async function getTypePage(pageNumber = 0) {
             console.error(">>>Skipped page #" + pageNumber + "<<<")
         }
             return pageLength
+
+}
+
+async function handleType(typeData) {
+
+    const assignedAttributes = await getAssignedAttributes(typeData.itemTypeId)
+
+    //if null is returned, getting attributes failed, return -1 for error control
+     if (assignedAttributes == null)  {
+         return -1
+     }
+     var outputArray = []
+     console.log("adding new attributes")
+     for (const addAttributeId of addAttributeIds){
+         outputArray.push(addAttributeId)
+     }
+     console.log("adding existing attributes")
+     for (const assignedAttributeId of assignedAttributes) {
+         outputArray.push(assignedAttributeId)
+     }
+
+     console.log("Existing attribute count :" + assignedAttributes.length, "Added attributes count :" + addAttributeIds.length, "Output attributes Count :" + outputArray.length)
+
+     if (outputArray.length == (assignedAttributes.length + addAttributeIds.length)) {
+         console.log("Counts Match, patch item")
+         await patchType(typeData.itemTypeId, outputArray)
+     } else {
+         return 0
+     }
+     return 1
 
 }
 
@@ -171,7 +192,6 @@ async function patchType(id, attributeArray){
     current = new Date()
     
     console.log(current.toISOString(),"|","Patch Item Type:"+id,patchResponse.response.statusCode, patchResponse.response.statusCode === 202 ? "SUCCESS" : "ERROR -- " + patchResponse.body.message )
-    console.log(">>><<<")
 }
 
 function makeRequest(options, retryAttempt = 0){
