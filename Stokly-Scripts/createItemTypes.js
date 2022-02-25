@@ -3,7 +3,7 @@ const fs = require("fs")
 const csv = require("csv-parser")
 const accessToken= process.argv[2]
 const environment = process.argv[3] || "dev"
-const timeDelay = process.argv[4]
+const timeDelay = process.argv[4] || 300
 
 
 

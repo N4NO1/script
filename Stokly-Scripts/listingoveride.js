@@ -5,7 +5,6 @@ const { Console } = require("console")
 const accessToken= process.argv[2]
 const environment = process.argv[3] || "dev"
 const channelId = process.argv[4]
-const csvDelay = process.argv[5] || 0
 if (channelId === "help"){
     console.log("node index.js accessToken [environment (default=dev)] [timeDelay (default=0)] channelId"),
     process.exit(1)
