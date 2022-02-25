@@ -5,6 +5,7 @@ Current list includes:
 [accountBalance.js](https://github.com/N4NO1/script/blob/main/Stokly-Scripts/accountBalance.js)
 ---
 This will update the account balance of customers from their barcode.  it uses the balances.csv file to input data.
+
 ```node
 node accountBalance.js :accessToken :environment :companyId :timeDelay
 ```
@@ -18,6 +19,18 @@ node accountBalance.js :accessToken :environment :companyId :timeDelay
 [addAttributes.js](https://github.com/N4NO1/script/blob/main/Stokly-Scripts/addAttributes.js)
 ---
 This will append attributes onto an entire accounts' item types.  This will not affect currently assigned attributes.
+
+**You must provide an attribute array directly into the code**
+
+```node
+node addAttributes.js :accessToken :environment
+```
+|Argument|Values Accepted|Default Value|
+|:---:|:---:|:---:|
+|accessToken|Bearer Token for authentication|
+|environment|dev or prod|dev|
+
+
 
 [collectItems.js](https://github.com/N4NO1/script/blob/main/Stokly-Scripts/collectItems.js)
 ---
