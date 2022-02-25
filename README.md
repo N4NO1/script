@@ -50,9 +50,28 @@ node collectItems.js :accessToken :environment :timeDelay :locationId
 ---
 This will check the value of inventory displayed on the item list, compared to the data in an items location data.
 
+```node
+node confirmStock.js :accessToken :environment :timeDelay
+```
+|Argument|Values Accepted|Default Value|
+|:---:|:---:|:---:|
+|accessToken|Bearer Token for authentication|
+|environment|dev or prod|dev|
+|timeDelay|API request time delay|250
+
 [copyMappings.js](https://github.com/N4NO1/script/blob/main/Stokly-Scripts/copyMappings.js)
 ---
 This will copy the mappings from 1 channel to another. 
+
+```node
+node copyMappings.js :accessToken :fromChannel :toChannel :companyID
+```
+|Argument|Values Accepted|Default Value|
+|:---:|:---:|:---:|
+|accessToken|Bearer Token for authentication|
+|fromChannel|The channel ID to copy mappings from|
+|toChannel|The channel ID to copy mappings to|
+|companyId|The companyId of the account|
 
 [createItemTypes.js](https://github.com/N4NO1/script/blob/main/Stokly-Scripts/createItemTypes.js)
 ---
