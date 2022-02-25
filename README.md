@@ -8,6 +8,12 @@ Current list includes:
 ```node
 node accountBalance.js :accessToken :environment :companyId :timeDelay
 ```
+|Argument|Values Accepted|Default Value|
+|:---:|:---:|:---:|
+|accessToken|Bearer Token for authentication|
+|environment|dev or prod|dev|
+|companyId|The companyId of the account|
+|timeDelay|API request time delay|300
 
 [addAttributes.js](https://github.com/N4NO1/script/blob/main/Stokly-Scripts/addAttributes.js)
 ---
