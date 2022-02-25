@@ -34,7 +34,17 @@ node addAttributes.js :accessToken :environment
 
 [collectItems.js](https://github.com/N4NO1/script/blob/main/Stokly-Scripts/collectItems.js)
 ---
-this will mark sale orders as collected in a specified account.  sale orders can be omitted using their sale ID.  It uses the ignore.csv to input data.
+This will mark sale orders as collected in a specified account.  sale orders can be omitted using their sale ID.  **It uses the ignore.csv(https://github.com/N4NO1/script/blob/main/Stokly-Scripts/Input%20CSVs/ignore.csv) to input data.**
+
+```node
+node collectItems.js :accessToken :environment :timeDelay :locationId
+```
+|Argument|Values Accepted|Default Value|
+|:---:|:---:|:---:|
+|accessToken|Bearer Token for authentication|
+|environment|dev or prod|dev|
+|timeDelay|API request time delay|0
+|locationId|The locationID to collect items from|
 
 [confirmStock.js](https://github.com/N4NO1/script/blob/main/Stokly-Scripts/conmfirmStock.js)
 ---
