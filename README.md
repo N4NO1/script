@@ -124,7 +124,7 @@ node salesScaleTest.js :accessToken :environment
 
 [scheduleSync.js](https://github.com/N4NO1/script/blob/main/Stokly-Scripts/scheduleSync.js)
 ---
-This will take this CSV [listings.csv](https://github.com/N4NO1/script/blob/main/Stokly-Scripts/Input%20CSVs/listings.csv)of SKUs and schedule them to sync in a defined channel
+This will take this CSV [listings.csv](https://github.com/N4NO1/script/blob/main/Stokly-Scripts/Input%20CSVs/listings.csv) of SKUs and schedule them to sync in a defined channel
 
 ```node
 node scheduleSync.js :accessToken :environment :timeDelay
