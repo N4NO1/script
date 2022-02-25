@@ -5,9 +5,9 @@ Current list includes:
 [accountBalance.js](https://github.com/N4NO1/script/blob/main/Stokly-Scripts/accountBalance.js)
 ---
 * this will update the account balance of customers from their barcode.  it uses the balances.csv file to input data.
-'''node
+```node
 node accountBalance.js :accessToken :environment :companyId :timeDelay
-'''
+```
 
 [addAttributes.js](https://github.com/N4NO1/script/blob/main/Stokly-Scripts/addAttributes.js)
 ---
