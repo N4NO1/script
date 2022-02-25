@@ -75,19 +75,56 @@ node copyMappings.js :accessToken :fromChannel :toChannel :companyID
 
 [createItemTypes.js](https://github.com/N4NO1/script/blob/main/Stokly-Scripts/createItemTypes.js)
 ---
-this will create item types from a list of names provided. It uses the itemtypes.csv file to input data.
+This will create item types from a list of names provided. It uses the itemtypes.csv file to input data.
+
+```node
+node createItemTypes.js :accessToken :environment :timeDelay
+```
+|Argument|Values Accepted|Default Value|
+|:---:|:---:|:---:|
+|accessToken|Bearer Token for authentication|
+|environment|dev or prod|dev|
+|timeDelay|API request time delay|300|
 
 [listingOveride.js](https://github.com/N4NO1/script/blob/main/Stokly-Scripts/listingOveride.js)
 ---
 This will work through every listing in a channel and remove all of the overides, or selected ones depending on configuration.
 
+```node
+node listingOveride.js :accessToken :environment :channelId
+```
+|Argument|Values Accepted|Default Value|
+|:---:|:---:|:---:|
+|accessToken|Bearer Token for authentication|
+|environment|dev or prod|dev|
+|channelId|Channel ID to remove the overides from|
+
+[removeImages.js](https://github.com/N4NO1/script/blob/main/Stokly-Scripts/removeImages.js)
+This script will remove the images from items where their ID is specified in 
+
 [salesScaleTest.js](https://github.com/N4NO1/script/blob/main/Stokly-Scripts/salesScaleTest.js)
 ---
 This will test the horizontal scaling of the sales service. This ensures that more services/workers are started when lag could be experienced. only the account causing the lag should be affected.
 
+```node
+node salesScaleTest.js :accessToken :environment :timeDelay
+```
+|Argument|Values Accepted|Default Value|
+|:---:|:---:|:---:|
+|accessToken|Bearer Token for authentication|
+|environment|dev or prod|dev|
+
 [scheduleSync.js](https://github.com/N4NO1/script/blob/main/Stokly-Scripts/scheduleSync.js)
 ---
 This will take a CSV of SKUs and schedule them to sync in a defined channel
+
+```node
+node scheduleSync.js :accessToken :environment :timeDelay
+```
+|Argument|Values Accepted|Default Value|
+|:---:|:---:|:---:|
+|accessToken|Bearer Token for authentication|
+|environment|dev or prod|dev|
 
 [skuChange.js](https://github.com/N4NO1/script/blob/main/Stokly-Scripts/skuChange.js)
 ---
@@ -95,7 +132,7 @@ This will take a CSV of existing SKUs and the SKUs to change to.  It will search
 
 [updatesaleorders.js](https://github.com/N4NO1/script/blob/main/Stokly-Scripts/updatesaleorders.js)
 ---
-this will run through all the sale orders of an account, getting 100 at a time, then patching an empty body.  This updates the sale order.  Originally used to hot-fix a sale order bug.
+This will run through all the sale orders of an account, getting 100 at a time, then patching an empty body.  This updates the sale order.  Originally used to hot-fix a sale order bug.
 
 [updateTypes.js](https://github.com/N4NO1/script/blob/main/Stokly-Scripts/updateTypes.js)
 ---
