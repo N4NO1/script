@@ -32,7 +32,7 @@ node addAttributes.js :accessToken :environment
 
 
 
-[collectItems.js](https://github.com/N4NO1/script/blob/main/Stokly-Scripts/collectItems.js)
+[collectItems.js](https://github.com/N4NO1/script/blob/main/Stokly-Scripts/Collectitems.js)
 ---
 This will mark sale orders as collected in a specified account.  sale orders can be omitted using their sale ID.  **It uses [ignore.csv](https://github.com/N4NO1/script/blob/main/Stokly-Scripts/Input%20CSVs/ignore.csv) to input data.**
 
@@ -46,7 +46,7 @@ node collectItems.js :accessToken :environment :timeDelay :locationId
 |timeDelay|API request time delay|0
 |locationId|The locationID to collect items from|
 
-[confirmStock.js](https://github.com/N4NO1/script/blob/main/Stokly-Scripts/conmfirmStock.js)
+[confirmStock.js](https://github.com/N4NO1/script/blob/main/Stokly-Scripts/confirmStock.js)
 ---
 This will check the value of inventory displayed on the item list, compared to the data in an items location data.
 
@@ -86,7 +86,7 @@ node createItemTypes.js :accessToken :environment :timeDelay
 |environment|dev or prod|dev|
 |timeDelay|API request time delay|300|
 
-[listingOveride.js](https://github.com/N4NO1/script/blob/main/Stokly-Scripts/listingOveride.js)
+[listingOveride.js](https://github.com/N4NO1/script/blob/main/Stokly-Scripts/listingoveride.js)
 ---
 This will work through every listing in a channel and remove all of the overides, or selected ones depending on configuration.
 
@@ -99,7 +99,7 @@ node listingOveride.js :accessToken :environment :channelId
 |environment|dev or prod|dev|
 |channelId|Channel ID to remove the overides from|
 
-[removeImages.js](https://github.com/N4NO1/script/blob/main/Stokly-Scripts/removeImages.js)
+[removeImages.js](https://github.com/N4NO1/script/blob/main/Stokly-Scripts/removeimages.js)
 This script will remove the images from items where their ID is specified in [removeimages.csv](https://github.com/N4NO1/script/blob/main/Stokly-Scripts/Input%20CSVs/removeimages.csv) 
 
 ```node
@@ -134,7 +134,7 @@ node scheduleSync.js :accessToken :environment :timeDelay
 |accessToken|Bearer Token for authentication|
 |environment|dev or prod|dev|
 
-[skuChange.js](https://github.com/N4NO1/script/blob/main/Stokly-Scripts/skuChange.js)
+[skuChange.js](https://github.com/N4NO1/script/blob/main/Stokly-Scripts/skuchange.js)
 ---
 This will take this CSV [skuinput.csv](https://github.com/N4NO1/script/blob/main/Stokly-Scripts/Input%20CSVs/skuinput.csv) of existing SKUs and the SKUs to change to.  It will search for the existing SKU, if found it will update it to the new value.
 
