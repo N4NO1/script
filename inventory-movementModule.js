@@ -6,9 +6,9 @@ const timeDelay = 200
 var accessTokenGlobal = ""
 
 
-movementControl(accessTokenGlobal, "production")
+movementControl(accessTokenGlobal)
 
-async function movementControl(accessToken, environment = "dev") {
+async function movementControl(accessToken) {
     var page = 0
     var pageResponseObject = {}
 
@@ -32,7 +32,7 @@ async function movementControl(accessToken, environment = "dev") {
 }
 
 
-async function getMovementPage(accessToken, pageSize = 100, pageNumber = 0, environment = "dev", fromDate = "", toDate = "") {
+async function getMovementPage(accessToken, pageSize = 100, pageNumber = 0, fromDate = "", toDate = "") {
     //Date format [yyyy-mm-dd 00:00:00]
     var filter = "?sortField=date&sortDirection=DESC&size=" + pageSize + "&page=" + pageNumber
 
@@ -54,7 +54,7 @@ async function getMovementPage(accessToken, pageSize = 100, pageNumber = 0, envi
     }
 
     const getRecordPageOptions = {
-        uri: "https://api." + (environment === "production" ? "" : "dev.") + "stok.ly/v0/inventory-movements"+filter,
+        uri: "https://api.stok.ly/v0/inventory-movements"+filter,
         method: "GET",
         headers: {
             authorization: "Bearer " + accessToken
