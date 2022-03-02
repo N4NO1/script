@@ -15,7 +15,7 @@ async function movementControl(accessToken) {
 
     do {
 
-        pageResponseObject = await getMovementPage(accessToken, 100, page, environment)
+        pageResponseObject = await getMovementPage(accessToken, 100, page)
         page++
 
         if (pageResponseObject.length > 0) {
