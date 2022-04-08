@@ -48,12 +48,11 @@ async function handleSales(){
     const totalResponse = await makeRequest(getTotalOptions)
     const totalData = JSON.parse(totalResponse.body)
     console.log("Listing Total:", totalData.metadata.count)
-    var pageNumber = 0
     var pageSize = 0
 
     do {
         const saleOptions={
-        url: "https://api." + (environment === "prod" ? "" : "dev." ) + "stok.ly/v1/saleorders?size=100&filter=[itemStatuses]::{unprocessed}&page="+pageNumber,
+        url: "https://api." + (environment === "prod" ? "" : "dev." ) + "stok.ly/v1/saleorders?size=100&filter=[itemStatuses]::{unprocessed}&page=0",
         method: "GET",
         headers: {authorization: "Bearer " + accessToken}
         }
@@ -63,7 +62,7 @@ async function handleSales(){
     // console.log(saleResponse)
         pageSize = JSON.parse(pageResponse.body).data.length
     for (var i=0;i <= (pageSize-1); i++){
-        console.log("Page:"+pageNumber,"||","Order:"+(i+1) +" of " + pageSize)
+        console.log("Order:"+(i+1) +" of " + pageSize)
         //start of loop
         var saleId ="" //defines saleId as a string
 
@@ -118,7 +117,6 @@ async function handleSales(){
         //end of else
         //end of loop
     }
-    pageNumber++
 } while (pageSize === 100 )
     console.log("DONE")  
  
