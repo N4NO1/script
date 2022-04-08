@@ -47,7 +47,7 @@ async function handleSales(){
  
     const totalResponse = await makeRequest(getTotalOptions)
     const totalData = JSON.parse(totalResponse.body)
-    console.log("Listing Total:", totalData.metadata.count)
+    console.log("Orders Total:", totalData.metadata.count)
     var pageSize = 0
 
     do {
